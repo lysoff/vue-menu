@@ -39,7 +39,7 @@ const icons = [
     <li v-for="(icon, index) in icons" :key="index"
       v-tooltip="{ content: icon.tooltip, delay: { show: 300, hide: 100 }, distance: 10 }"
       @mouseenter="hoveredIndex = index" @mouseleave="hoveredIndex = null" @focusin="hoveredIndex = index"
-      @focusout="hoveredIndex = null"
+      @focusout="hoveredIndex = null" tabindex="0"
       :class="{ hovered: index === hoveredIndex, sibling: hoveredIndex !== null && (index === hoveredIndex - 1 || index === hoveredIndex + 1) }">
       <inline-svg :src="'/src/assets/' + icon.filename + '.svg'" />
     </li>
@@ -73,6 +73,10 @@ li {
   display: flex;
   justify-content: center;
   transition: flex 0.3s;
+}
+
+li:focus {
+  outline: none;
 }
 
 li.sibling {
