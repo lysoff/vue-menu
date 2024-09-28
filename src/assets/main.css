@@ -18,3 +18,11 @@ main {
   color: black;
   font-weight: 500;
 }
+
+
+.v-popper__popper
+.v-popper__wrapper
+.v-popper__arrow-container
+.v-popper__arrow-outer {
+  border-bottom-color: rgb(155, 226, 34) !important;
+}
