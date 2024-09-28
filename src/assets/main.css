@@ -1,9 +1,20 @@
 body {
   background-color: black;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
 }
 
 main {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.v-popper__popper
+.v-popper__wrapper
+.v-popper__inner {
+  background-color: rgb(155, 226, 34);
+  color: black;
+  font-weight: 500;
 }
