@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const hoveredIndex = ref(null)
+const ulRef = ref(null);
 
 const icons = [
   { filename: 'c-sharp', tooltip: 'C Sharp' },
@@ -32,15 +33,22 @@ const icons = [
   { filename: 'npm', tooltip: 'NPM' },
   { filename: 'perl', tooltip: 'Perl' },
 ]
+
+const offset = ref(0);
+
+onMounted(() => {
+  offset.value = (ulRef.value.getBoundingClientRect().width - 28 * 36) / 2
+})
 </script>
 
 <template>
-  <ul>
+  <ul ref="ulRef">
     <li v-for="(icon, index) in icons" :key="index"
       v-tooltip="{ content: icon.tooltip, delay: { show: 300, hide: 100 }, distance: 10 }"
-      @mouseenter="hoveredIndex = index" @mouseleave="hoveredIndex = null" @focusin="hoveredIndex = index"
+      @mouseleave="hoveredIndex = null" @mouseenter="hoveredIndex = index" @focusin="hoveredIndex = index"
       @focusout="hoveredIndex = null" tabindex="0"
-      :class="{ hovered: index === hoveredIndex, sibling: hoveredIndex !== null && (index === hoveredIndex - 1 || index === hoveredIndex + 1) }">
+      :class="{ hovered: index === hoveredIndex, sibling: hoveredIndex !== null && (index === hoveredIndex - 1 || index === hoveredIndex + 1) }"
+      :style="{ left: hoveredIndex === null || hoveredIndex === index ? (offset + index * 36) + 'px' : hoveredIndex > index ? (offset + index * 36 - 14) + 'px' : (offset + index * 36 + 14) + 'px' }">
       <inline-svg :src="'/src/assets/' + icon.filename + '.svg'" />
     </li>
   </ul>
@@ -56,23 +64,26 @@ svg {
 }
 
 ul {
+  background-color: aquamarine;
   display: flex;
   gap: 0px;
   align-items: center;
   justify-items: center;
   width: 100%;
-  max-width: 1024px;
+  max-width: 1420px;
   height: 40px;
   padding: 0;
+  position: relative;
 }
 
 li {
+  position: absolute;
   cursor: pointer;
   list-style-type: none;
-  flex: 1;
+  width: 36px;
   display: flex;
   justify-content: center;
-  transition: flex 0.3s;
+  transition: width 0.3s, left 0.3s;
 }
 
 li:focus {
@@ -80,7 +91,7 @@ li:focus {
 }
 
 li.sibling {
-  flex-grow: 1.2
+  width: 44px;
 }
 
 li.sibling>svg {
@@ -89,7 +100,7 @@ li.sibling>svg {
 }
 
 li.hovered {
-  flex-grow: 1.5
+  width: 56px;
 }
 
 li.hovered>svg {
