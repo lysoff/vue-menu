@@ -1,9 +1,5 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-
-const hoveredIndex = ref(null)
-const ulRef = ref(null);
-
 const icons = [
   { filename: 'c-sharp', tooltip: 'C Sharp' },
   { filename: 'css', tooltip: 'CSS' },
@@ -34,10 +30,25 @@ const icons = [
   { filename: 'perl', tooltip: 'Perl' },
 ]
 
-const offset = ref(0);
+const MAX_GAP = 32;
+const MIN_GAP = 16;
+const OFFSET = 12;
+const ICON_WIDTH = 24;
+
+const hoveredIndex = ref(null)
+const ulRef = ref(null);
+const padding = ref(0);
+const width = ref(0);
+
+function calculateWidth() {
+  const ulWidth = ulRef.value.getBoundingClientRect().width;
+
+  width.value = Math.max(Math.min(ulWidth / icons.length, MAX_GAP + ICON_WIDTH), MIN_GAP + ICON_WIDTH);
+  padding.value = (ulWidth - icons.length * width.value) / 2;
+}
 
 onMounted(() => {
-  offset.value = (ulRef.value.getBoundingClientRect().width - 28 * 36) / 2
+  new ResizeObserver(calculateWidth).observe(ulRef.value);
 })
 </script>
 
@@ -48,7 +59,25 @@ onMounted(() => {
       @mouseleave="hoveredIndex = null" @mouseenter="hoveredIndex = index" @focusin="hoveredIndex = index"
       @focusout="hoveredIndex = null" tabindex="0"
       :class="{ hovered: index === hoveredIndex, sibling: hoveredIndex !== null && (index === hoveredIndex - 1 || index === hoveredIndex + 1) }"
-      :style="{ left: hoveredIndex === null ? (offset + index * 36) + 'px' : hoveredIndex > index ? (offset + index * 36 - 14) + 'px' : hoveredIndex === index ? (offset + index * 36 - 8) + 'px' : (offset + index * 36 + 14) + 'px' }">
+      :style="{
+        left: hoveredIndex === null
+          ? (padding + index * width) + 'px'
+          : index === hoveredIndex - 1
+            ? (padding + index * width - OFFSET * 2) + 'px'
+            : index === hoveredIndex + 1
+              ? padding + index * width + OFFSET / 2
+              : hoveredIndex > index
+                ? (padding + index * width - OFFSET) + 'px'
+                : hoveredIndex === index
+                  ? (padding + index * width - (width / 2)) + 'px'
+                  : (padding + index * width + OFFSET) + 'px',
+        width: hoveredIndex === index
+          ? width * 2 + 'px'
+          : hoveredIndex !== null && (index === hoveredIndex - 1 || index === hoveredIndex + 1)
+            ? width * 1.5 + 'px'
+            : width + 'px'
+
+      }">
       <inline-svg :src="'/src/assets/' + icon.filename + '.svg'" />
     </li>
   </ul>
@@ -77,7 +106,6 @@ li {
   position: absolute;
   cursor: pointer;
   list-style-type: none;
-  width: 36px;
   display: flex;
   justify-content: center;
   transition: width 0.3s, left 0.3s;
@@ -87,17 +115,9 @@ li:focus {
   outline: none;
 }
 
-li.sibling {
-  width: 44px;
-}
-
 li.sibling>svg {
   height: 32px;
   width: 32px;
-}
-
-li.hovered {
-  width: 56px;
 }
 
 li.hovered>svg {
