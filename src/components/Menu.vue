@@ -75,7 +75,8 @@ onMounted(() => {
           ? width * 2 + 'px'
           : hoveredIndex !== null && (index === hoveredIndex - 1 || index === hoveredIndex + 1)
             ? width * 1.5 + 'px'
-            : width + 'px'
+            : width + 'px',
+        zIndex: hoveredIndex === index ? 10 : 0
 
       }">
       <inline-svg :src="'/src/assets/' + icon.filename + '.svg'" />
