@@ -64,7 +64,7 @@ svg {
 }
 
 ul {
-  background-color: aquamarine;
+  position: relative;
   display: flex;
   gap: 0px;
   align-items: center;
@@ -73,7 +73,6 @@ ul {
   max-width: 1420px;
   height: 40px;
   padding: 0;
-  position: relative;
 }
 
 li {
