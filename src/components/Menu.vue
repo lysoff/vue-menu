@@ -48,7 +48,7 @@ onMounted(() => {
       @mouseleave="hoveredIndex = null" @mouseenter="hoveredIndex = index" @focusin="hoveredIndex = index"
       @focusout="hoveredIndex = null" tabindex="0"
       :class="{ hovered: index === hoveredIndex, sibling: hoveredIndex !== null && (index === hoveredIndex - 1 || index === hoveredIndex + 1) }"
-      :style="{ left: hoveredIndex === null || hoveredIndex === index ? (offset + index * 36) + 'px' : hoveredIndex > index ? (offset + index * 36 - 14) + 'px' : (offset + index * 36 + 14) + 'px' }">
+      :style="{ left: hoveredIndex === null ? (offset + index * 36) + 'px' : hoveredIndex > index ? (offset + index * 36 - 14) + 'px' : hoveredIndex === index ? (offset + index * 36 - 8) + 'px' : (offset + index * 36 + 14) + 'px' }">
       <inline-svg :src="'/src/assets/' + icon.filename + '.svg'" />
     </li>
   </ul>
@@ -66,9 +66,7 @@ svg {
 ul {
   position: relative;
   display: flex;
-  gap: 0px;
   align-items: center;
-  justify-items: center;
   width: 100%;
   max-width: 1420px;
   height: 40px;
@@ -94,8 +92,8 @@ li.sibling {
 }
 
 li.sibling>svg {
-  height: 36px;
-  width: 36px;
+  height: 32px;
+  width: 32px;
 }
 
 li.hovered {
